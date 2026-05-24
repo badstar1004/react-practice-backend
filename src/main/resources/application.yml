@@ -1,1 +1,24 @@
-spring.application.name=issue-BE
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: issue-BE
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521:XE
+    username: C##issuetracker
+    password: "issuetracker#1234"
+
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.enough.issuebe.domain
+  configuration:
+    map-underscore-to-camel-case: true
+    jdbc-type-for-null: NULL
+
+logging:
+  level:
+    com.enough.issuebe.mapper: debug

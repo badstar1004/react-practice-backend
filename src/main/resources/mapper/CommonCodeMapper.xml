@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.enough.issuebe.mapper.CommonCodeMapper">
+
+    <select id="selectCommonCodeList" resultType="com.enough.issuebe.domain.CommonCode">
+        SELECT
+            GROUP_CD,
+            CODE,
+            CODE_NM AS name,
+            SORT_ORD
+        FROM COMMON_CODE
+        WHERE USE_YN = 'Y'
+        <if test="groupCodes != null and groupCodes.size() > 0">
+            AND GROUP_CD IN
+            <foreach collection="groupCodes" item="groupCode" open="(" separator="," close=")">
+                #{groupCode}
+            </foreach>
+        </if>
+        ORDER BY GROUP_CD, SORT_ORD, CODE
+    </select>
+
+</mapper>

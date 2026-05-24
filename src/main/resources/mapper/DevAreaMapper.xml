@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.enough.issuebe.mapper.DevAreaMapper">
+
+    <select id="selectDevAreaList" resultType="com.enough.issuebe.domain.DevArea">
+        SELECT
+            DEV_AREA_CD AS devAreaCd,
+            DEV_AREA_NM AS devAreaName,
+            SORT_ORD
+        FROM DEV_AREA
+        WHERE USE_YN = 'Y'
+        ORDER BY SORT_ORD, DEV_AREA_CD
+    </select>
+
+</mapper>

@@ -1,0 +1,21 @@
+package com.enough.issuebe.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException exception) {
+        return ResponseEntity.badRequest().body(new ErrorResponse(exception.getMessage()));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleException(Exception exception) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse("서버 오류가 발생했습니다."));
+    }
+}

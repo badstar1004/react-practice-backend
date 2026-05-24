@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.enough.issuebe.mapper.OwnerCodeInfMapper">
+
+    <select id="selectOwnerCodeList" parameterType="com.enough.issuebe.dto.OwnerCodeSearchRequest"
+            resultType="com.enough.issuebe.domain.OwnerCodeInf">
+        SELECT
+            WORK_AREA_CD,
+            OWNER_CD,
+            USAGE_CD
+        FROM OWNER_CODE_INF
+        <where>
+            <if test="ownerCd != null and ownerCd != ''">
+                AND UPPER(OWNER_CD) LIKE '%' || UPPER(#{ownerCd}) || '%'
+            </if>
+            <if test="usageCd != null and usageCd != ''">
+                AND USAGE_CD = #{usageCd}
+            </if>
+            <if test="noUsage != null and noUsage">
+                AND (USAGE_CD IS NULL OR TRIM(USAGE_CD) = '')
+            </if>
+        </where>
+        ORDER BY WORK_AREA_CD, OWNER_CD
+    </select>
+
+    <update id="updateUsageCd" parameterType="com.enough.issuebe.domain.OwnerCodeInf">
+        UPDATE OWNER_CODE_INF
+        SET USAGE_CD = #{usageCd, jdbcType=VARCHAR}
+        WHERE WORK_AREA_CD = #{workAreaCd}
+          AND OWNER_CD = #{ownerCd}
+    </update>
+
+</mapper>
