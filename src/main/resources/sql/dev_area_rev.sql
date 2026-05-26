@@ -148,5 +148,5 @@ COMMIT;
 --   FROM DEV_AREA WHERE USE_YN = 'Y' ORDER BY SORT_ORD;
 --
 -- Rev 목록 API (GET /dev-area-rev?devAreaCd=):
---   DB에서 devAreaCd 전체 Rev 조회 후 서버에서 최종 Rev만 ownerCd별 usageList로 그룹
---   응답 예: [{ devAreaCd, ownerCd, finalRev, usageList: [{ usageCd, revStatus, ... }] }]
+--   devAreaCd 기준 Rev 전체 row 배열 반환 (프론트 resolveFinalRevRows에서 최종 Rev 필터)
+--   SELECT ... FROM DEV_AREA_REV_INF WHERE DEV_AREA_CD = :devAreaCd ORDER BY FINAL_REV DESC, OWNER_CD

@@ -1,7 +1,7 @@
 package com.enough.issuebe.controller;
 
 import com.enough.issuebe.dto.DevAreaResponse;
-import com.enough.issuebe.dto.DevAreaRevOwnerGroupResponse;
+import com.enough.issuebe.dto.DevAreaRevInfResponse;
 import com.enough.issuebe.dto.DevAreaRevSearchRequest;
 import com.enough.issuebe.service.DevAreaRevService;
 import java.util.List;
@@ -22,11 +22,8 @@ public class DevAreaRevController {
         return devAreaRevService.getDevAreaList();
     }
 
-    /**
-     * devAreaCd 기준 Rev 목록 — ownerCd별 usageList 중첩 (프론트 devAreaRevGrid)
-     */
     @GetMapping
-    public List<DevAreaRevOwnerGroupResponse> getDevAreaRevList(DevAreaRevSearchRequest request) {
+    public List<DevAreaRevInfResponse> getDevAreaRevList(DevAreaRevSearchRequest request) {
         return devAreaRevService.getDevAreaRevList(request);
     }
 }

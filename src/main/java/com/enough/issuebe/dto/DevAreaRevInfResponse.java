@@ -6,8 +6,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DevAreaRevUsageItemResponse {
+public class DevAreaRevInfResponse {
 
+    private String devAreaCd;
+    private String ownerCd;
     private String usageCd;
     private Integer finalRev;
     private String revStatus;
@@ -17,8 +19,10 @@ public class DevAreaRevUsageItemResponse {
     private String updateUser;
     private String updateDt;
 
-    public static DevAreaRevUsageItemResponse from(DevAreaRevInf devAreaRevInf) {
-        DevAreaRevUsageItemResponse response = new DevAreaRevUsageItemResponse();
+    public static DevAreaRevInfResponse from(DevAreaRevInf devAreaRevInf) {
+        DevAreaRevInfResponse response = new DevAreaRevInfResponse();
+        response.setDevAreaCd(devAreaRevInf.getDevAreaCd());
+        response.setOwnerCd(devAreaRevInf.getOwnerCd());
         response.setUsageCd(devAreaRevInf.getUsageCd());
         response.setFinalRev(devAreaRevInf.getFinalRev());
         response.setRevStatus(devAreaRevInf.getRevStatus());
