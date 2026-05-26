@@ -147,11 +147,6 @@ COMMIT;
 --   SELECT DEV_AREA_CD AS devAreaCd, DEV_AREA_NM AS devAreaName
 --   FROM DEV_AREA WHERE USE_YN = 'Y' ORDER BY SORT_ORD;
 --
--- Rev 전체 목록 (프론트에서 MAX(FINAL_REV)로 최종 Rev·그리드 필터):
---   SELECT DEV_AREA_CD AS devAreaCd, OWNER_CD AS ownerCd, USAGE_CD AS usageCd,
---          FINAL_REV AS finalRev, REV_STATUS AS revStatus, REV_DESC AS revDesc,
---          CREATE_USER AS createUser, CREATE_DT AS createDt,
---          UPDATE_USER AS updateUser, UPDATE_DT AS updateDt
---   FROM DEV_AREA_REV_INF
---   WHERE DEV_AREA_CD = :devAreaCd
---   ORDER BY FINAL_REV DESC, OWNER_CD;
+-- Rev 목록 API (GET /dev-area-rev?devAreaCd=):
+--   DB에서 devAreaCd 전체 Rev 조회 후 서버에서 최종 Rev만 ownerCd별 usageList로 그룹
+--   응답 예: [{ devAreaCd, ownerCd, finalRev, usageList: [{ usageCd, revStatus, ... }] }]

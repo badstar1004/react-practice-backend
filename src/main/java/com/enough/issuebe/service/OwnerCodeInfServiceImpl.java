@@ -1,15 +1,11 @@
 package com.enough.issuebe.service;
 
-import com.enough.issuebe.domain.CommonCode;
 import com.enough.issuebe.domain.OwnerCodeInf;
-import com.enough.issuebe.dto.CommonCodeListResponse;
-import com.enough.issuebe.dto.CommonCodeResponse;
 import com.enough.issuebe.dto.OwnerCodeInfResponse;
 import com.enough.issuebe.dto.OwnerCodeSaveRequest;
 import com.enough.issuebe.dto.OwnerCodeSaveResponse;
 import com.enough.issuebe.dto.OwnerCodeSearchRequest;
 import com.enough.issuebe.exception.BusinessException;
-import com.enough.issuebe.mapper.CommonCodeMapper;
 import com.enough.issuebe.mapper.OwnerCodeInfMapper;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,36 +20,18 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 public class OwnerCodeInfServiceImpl implements OwnerCodeInfService {
 
-    private static final String USAGE_GROUP_CODE = "USAGE_CD";
     private static final String DEFAULT_WORK_AREA_CD = "DEFAULT";
 
     private final OwnerCodeInfMapper ownerCodeInfMapper;
-    private final CommonCodeMapper commonCodeMapper;
 
     @Override
     public List<OwnerCodeInfResponse> getOwnerCodeList(OwnerCodeSearchRequest request) {
         OwnerCodeSearchRequest searchRequest = request != null ? request : new OwnerCodeSearchRequest();
+        normalizeSearchRequest(searchRequest);
 
         return ownerCodeInfMapper.selectOwnerCodeList(searchRequest).stream()
                 .map(OwnerCodeInfResponse::from)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public CommonCodeListResponse getCommonCodeList(List<String> groupCodes) {
-        List<String> targetGroupCodes = CollectionUtils.isEmpty(groupCodes)
-                ? List.of(USAGE_GROUP_CODE)
-                : groupCodes;
-
-        List<CommonCode> commonCodes = commonCodeMapper.selectCommonCodeList(targetGroupCodes);
-        List<CommonCodeResponse> usageCodeList = commonCodes.stream()
-                .filter(code -> USAGE_GROUP_CODE.equals(code.getGroupCd()))
-                .map(CommonCodeResponse::from)
-                .collect(Collectors.toList());
-
-        CommonCodeListResponse response = new CommonCodeListResponse();
-        response.setUsageCodeList(usageCodeList);
-        return response;
     }
 
     @Override
@@ -85,6 +63,13 @@ public class OwnerCodeInfServiceImpl implements OwnerCodeInfService {
         return response;
     }
 
+    private void normalizeSearchRequest(OwnerCodeSearchRequest searchRequest) {
+        if (StringUtils.hasText(searchRequest.getOwnerCd())) {
+            searchRequest.setOwnerCd(
+                    searchRequest.getOwnerCd().replaceAll("[^A-Za-z0-9]", "").toUpperCase());
+        }
+    }
+
     private void validateSaveRow(OwnerCodeSaveRequest row) {
         if (row == null) {
             throw new BusinessException("저장 요청 데이터가 올바르지 않습니다.");
@@ -104,7 +89,7 @@ public class OwnerCodeInfServiceImpl implements OwnerCodeInfService {
         OwnerCodeInf ownerCodeInf = new OwnerCodeInf();
         ownerCodeInf.setWorkAreaCd(
                 StringUtils.hasText(row.getWorkAreaCd()) ? row.getWorkAreaCd() : DEFAULT_WORK_AREA_CD);
-        ownerCodeInf.setOwnerCd(row.getOwnerCd().trim());
+        ownerCodeInf.setOwnerCd(row.getOwnerCd().trim().toUpperCase());
         ownerCodeInf.setUsageCd(row.getUsageCd().trim());
         return ownerCodeInf;
     }
